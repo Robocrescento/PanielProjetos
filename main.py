@@ -5,10 +5,13 @@ from numpy import random
 from streamlit_autorefresh import st_autorefresh
 url_base='https://sturgeon-boss-regularly.ngrok-free.app'
 
-st_autorefresh(interval=10000, key="autorefresh")
+st_autorefresh(interval=20000, key="autorefresh")
 
 st.header("Encaminhador de pedidos")
 
+nome=st.text_input("Me diga seu nome")
+if nome.strip() is '':
+    st.stop()
 
 
 if not 'key' in st.session_state:
@@ -34,7 +37,7 @@ df_fila=df_fila.sort_values('Data_Hora')
 params=st.query_params.to_dict()
 
 
-criar_tarefa=st.button("Pedir para tarefa ser atualizada")
+criar_tarefa=st.button("Download Extrato Omie")
 
 if criar_tarefa:
     resp=requests.get(url_base+'/brognoli').json()
@@ -42,20 +45,25 @@ if criar_tarefa:
     st.rerun()
 
 mapper_respostas={
+    None:'Atualização ainda não está na fila',
     'ongoing':"Atualização rodando",
     'pending':"Atualização na fila",
-    'finished':"Atualização na finalizada"
+    'finished':"Finalizada"
 }
 
 if 'uid' in st.query_params.to_dict():
     resp=requests.get(url_base+'/status/'+st.query_params['uid']).json()
     st.subheader(f"Esperando pedido de código:")
     st.write(resp['UID'])
-    st.subheader(f"Status")
+    st.subheader(f"Pedido:")
 
-    st.write(resp['Status']+':'+str(mapper_respostas.get(resp['Status'])))
     st.write(f"Solicitado por {resp['Solicitou']} sobre o projeto {resp['Projeto']}.")
-    st.write(f"Tal pedido foi feito ás {resp['Data_Hora']}.")
+    st.write(f"O pedido foi feito {resp['Data_Hora']}.")
+
+    if resp['Status']=='finished':
+        st.success("Status : "+str(mapper_respostas.get(resp['Status'])))
+    else:
+        st.info("Status : "+str(mapper_respostas.get(resp['Status'])))
 
     uid=st.query_params['uid']
 
