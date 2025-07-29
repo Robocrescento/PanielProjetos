@@ -1,10 +1,12 @@
 import requests
 import pandas as pd
-import streamlit as st
 from numpy import random
 from streamlit_autorefresh import st_autorefresh
+import streamlit as st
 url_base='https://sturgeon-boss-regularly.ngrok-free.app'
-
+nome='Rod'
+args='asdf'
+projeto='projeto'
 st_autorefresh(interval=20000, key="autorefresh")
 
 st.header("Encaminhador de pedidos")
@@ -37,10 +39,12 @@ df_fila=df_fila.sort_values('Data_Hora')
 params=st.query_params.to_dict()
 
 
-criar_tarefa=st.button("Download Extrato Omie")
+criar_tarefa_Omie=st.button("Download Extrato Omie.")
 
-if criar_tarefa:
-    resp=requests.get(url_base+'/brognoli').json()
+if criar_tarefa_Omie:
+    resp=requests.get(url_base+f'/start-projeto?projeto={'brognoli'}&nome={nome}&argumentos={'args'}')
+    resp.text
+    resp=resp.json()
     st.query_params['uid']=resp['uid']
     st.rerun()
 
