@@ -52,7 +52,8 @@ mapper_respostas={
     None:'Atualização ainda não está na fila',
     'ongoing':"Atualização rodando",
     'pending':"Atualização na fila",
-    'finished':"Finalizada"
+    'finished':"Finalizada",
+    'error':"Erro de execução",
 }
 
 if 'uid' in st.query_params.to_dict():
@@ -67,6 +68,10 @@ if 'uid' in st.query_params.to_dict():
 
     if resp['Status']=='finished':
         st.success("Status : "+str(mapper_respostas.get(resp['Status'])))
+        st.success("OBS : "+str(resp['OBS']))
+    elif resp['Status']=='error':
+        st.warning("Status : "+str(mapper_respostas.get(resp['Status'])))
+        st.warning("OBS : "+str(resp['OBS']))
     else:
         st.info("Status : "+str(mapper_respostas.get(resp['Status'])))
 
