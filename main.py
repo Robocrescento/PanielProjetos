@@ -56,9 +56,10 @@ mapper_respostas={
 }
 
 if 'uid' in st.query_params.to_dict():
-    resp=requests.get(url_base+'/status/'+st.query_params['uid']).json()
+    resp=requests.get(url_base+'/status/'+st.query_params['uid'])
+    resp=resp.json()
     st.subheader(f"Esperando pedido de código:")
-    st.write(resp['UID'])
+    #st.write(resp['UID'])
     st.subheader(f"Pedido:")
 
     st.write(f"Solicitado por {resp['Solicitou']} sobre o projeto {resp['Projeto']}.")
