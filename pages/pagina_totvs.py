@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import json
 import requests
+from streamlit_autorefresh import st_autorefresh
 path=fr'C:\Users\{os.getlogin()}\Crescento Consultoria Financeira\Hub dados - DadosBPO\Robos_v2\Codigos\ROBO_TOTVS\utils\Caminhos.xlsx'
 url_base='https://sturgeon-boss-regularly.ngrok-free.app'
 
@@ -61,7 +62,9 @@ if st.session_state.get('Hora_Pedido') is None:
     st.stop()
 st.info(f"Mostrando encomenda de {st.session_state['Hora_Pedido']}.")
 
-if st.toggle("Mostrar"):
-    state=np.random.random()
-    df=checkout(st.session_state['df'],state )
-    df
+st_autorefresh(interval=20000, key="autorefresh")
+
+
+state=np.random.random()
+df=checkout(st.session_state['df'],state )
+df
