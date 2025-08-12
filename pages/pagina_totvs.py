@@ -6,7 +6,7 @@ import os
 import json
 import requests
 from streamlit_autorefresh import st_autorefresh
-path=fr'C:\Users\{os.getlogin()}\Crescento Consultoria Financeira\Hub dados - DadosBPO\Robos_v2\Codigos\ROBO_TOTVS\utils\Caminhos.xlsx'
+path=fr'Caminhos.xlsx'
 url_base='https://sturgeon-boss-regularly.ngrok-free.app'
 
 opções_totvs=pd.read_excel(path,sheet_name=1).columns.tolist()
