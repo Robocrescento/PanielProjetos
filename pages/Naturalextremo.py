@@ -42,10 +42,10 @@ df_fila=df_fila.sort_values('Data_Hora')
 params=st.query_params.to_dict()
 
 
-criar_tarefa_Omie=st.button("Download Extrato Omie Brognoli.")
+criar_tarefa_Omie=st.button("Download Extrato Omie Naturalextremo.")
 
 if criar_tarefa_Omie:
-    resp=requests.get(url_base+f'/start-projeto?&projeto={'brognoli'}&nome={nome}&argumentos={'args'}')
+    resp=requests.get(url_base+f'/start-projeto?&projeto={'Naturalextremo'}&nome={nome}&argumentos={'args'}')
     resp.text
     resp=resp.json()
     st.query_params['uid']=resp['uid']
