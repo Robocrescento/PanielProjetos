@@ -45,10 +45,10 @@ def coloca_na_fila(escolhidos):
 
 
 if st.button('Fazer pedido'):
+    with st.status("Carregando"):
+        df=coloca_na_fila(escolhidos)
 
-    df=coloca_na_fila(escolhidos)
-
-    st.session_state['df']=df
+        st.session_state['df']=df
 
 @st.cache_data
 def checkout(df,state=None):
