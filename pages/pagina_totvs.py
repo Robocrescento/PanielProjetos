@@ -25,40 +25,46 @@ mes=st.selectbox('Mês',list(range(1,13)),mes_at)
 #escolhidos=opções_totvs[:10]
 
 
-def coloca_na_fila(relatorio,mes,ano):
+
+def coloca_na_fila(escolhidos):
     projeto = 'totvs'
     nome = 'Dani'
-    args = {'relatorio': relatorio, 'mes': mes, 'ano': ano}
-    jargs = json.dumps(args)
-    fila = requests.get(url_base + f'/start-projeto?&nome={nome}&projeto={projeto}&argumentos={jargs}').json()
-    uid=fila.get('uid')
+    args=[{'relatorio':e,'mes':mes,'ano':ano} for e in escolhidos]
+    lista = {'lista': [{'nome': nome, 'projeto': projeto, 'argumentos': e} for e in args]}
+    resposta = requests.post(url_base + '/batch-start-projeto', json=lista).json()
     hora=datetime.now().strftime('%d/%m %H:%M')
-    args['hora']=hora
-    args['codigo']=uid
-    args['status']='Nao está na fila'
+
+    uids=[e['uid'] for e in resposta]
+    df=pd.DataFrame(args)
+    df.loc[:,'codigo']=uids
+    df.loc[:,'status']='Nao está na fila'
+    df.loc[:,'hora']=hora
     st.session_state['Hora_Pedido']=hora
-    return args
+
+    return df
+
 
 if st.button('Fazer pedido'):
-    dicts = []
-    for e in escolhidos:
-        sleep(1)
-        dicts.append(coloca_na_fila(e,mes,ano))
-    df = pd.DataFrame(dicts)
+
+    df=coloca_na_fila(escolhidos)
 
     st.session_state['df']=df
 
 @st.cache_data
 def checkout(df,state=None):
-    for id, row in df.iterrows():
-        status = row.status
-        codigo = row.codigo
-        if not status in ('finished'):
-            status = requests.get(url_base + '/status/' + codigo).json().get('Status')
-        df.loc[id, 'status'] = status
+
+    uids = df.codigo.tolist()
+    uids={'uids':uids}
+    print(uids)
+    resposta_lista = requests.post(url_base + '/status-batch', json=uids)
+
+    lista=resposta_lista.json()
+    df.loc[:,'status']=[e['Status'] for e in lista]
+
     st.session_state['df'] = df
 
     return df
+
 
 if st.session_state.get('Hora_Pedido') is None:
     st.stop()
