@@ -6,6 +6,7 @@ import os
 import json
 import requests
 from streamlit_autorefresh import st_autorefresh
+from time import sleep
 path=fr'Caminhos.xlsx'
 url_base='https://sturgeon-boss-regularly.ngrok-free.app'
 
@@ -41,6 +42,7 @@ def coloca_na_fila(relatorio,mes,ano):
 if st.button('Fazer pedido'):
     dicts = []
     for e in escolhidos:
+        sleep(1)
         dicts.append(coloca_na_fila(e,mes,ano))
     df = pd.DataFrame(dicts)
 
@@ -61,8 +63,9 @@ def checkout(df,state=None):
 if st.session_state.get('Hora_Pedido') is None:
     st.stop()
 st.info(f"Mostrando encomenda de {st.session_state['Hora_Pedido']}.")
+st.info(f"Relatórios de { ",".join(st.session_state['df']['relatorio'].tolist())}.")
 
-st_autorefresh(interval=20000, key="autorefresh")
+st_autorefresh(interval=60000, key="autorefresh")
 
 
 state=np.random.random()
