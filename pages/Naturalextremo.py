@@ -35,7 +35,7 @@ try:
 except:
     st.warning("Erro no sistema. Contate o desenvolvedor")
     st.stop()
-df_fila=df_fila.loc[df_fila['Status']!='finished']
+df_fila=df_fila.loc[df_fila['Status']=='pending']
 df_fila['Data_Hora']=pd.to_datetime(df_fila['Data_Hora'])
 df_fila=df_fila.sort_values('Data_Hora')
 
