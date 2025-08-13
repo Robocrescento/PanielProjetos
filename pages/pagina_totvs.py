@@ -41,7 +41,7 @@ def coloca_na_fila(relatorio,mes,ano):
 if st.button('Fazer pedido'):
     dicts = []
     for e in escolhidos:
-        dicts.append(coloca_na_fila(e,mes_at,ano_at))
+        dicts.append(coloca_na_fila(e,mes,ano))
     df = pd.DataFrame(dicts)
 
     st.session_state['df']=df
