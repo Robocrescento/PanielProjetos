@@ -30,7 +30,9 @@ def coloca_na_fila(escolhidos):
     projeto = 'totvs'
     nome = 'Dani'
     args=[{"relatorio":e,"mes":mes,"ano":ano} for e in escolhidos]
-    lista = {'lista': [{'nome': nome, 'projeto': projeto, 'argumentos': e} for e in args]}
+    jargs = [json.dumps(e) for e in args]
+
+    lista = {'lista': [{'nome': nome, 'projeto': projeto, 'argumentos': e} for e in jargs]}
     resposta = requests.post(url_base + '/batch-start-projeto', json=lista).json()
     hora=datetime.now().strftime('%d/%m %H:%M')
 
