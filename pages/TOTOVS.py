@@ -86,7 +86,9 @@ with tabs[1]:
 
     resposta_fila['Data_Hora']=pd.to_datetime(resposta_fila['Data_Hora'])
     resposta_fila['Hora']=resposta_fila.Data_Hora.dt.strftime('%H:%m')
-    resposta_fila=resposta_fila[['Solicitou','Hora','relatorio','mes','ano','status']].rename(columns={'Solicitou':'Quem'})
+    resposta_fila=resposta_fila[['Solicitou','Hora','relatorio','mes','ano','Status']].rename(columns={'Solicitou':'Quem'})
+
+    resposta_fila.Status=resposta_fila.Status.replace('finished','Finalizado').replace('ongoing','Processando').replace('pending','Na Fila')
     resposta_fila.columns=resposta_fila.columns.str.title()
 
     st_autorefresh(interval=60000, key="autorefresh")
