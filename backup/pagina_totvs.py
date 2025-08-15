@@ -79,3 +79,4 @@ st_autorefresh(interval=60000, key="autorefresh")
 state=np.random.random()
 df=checkout(st.session_state['df'],state )
 df
+
