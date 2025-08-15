@@ -12,7 +12,7 @@ url_base='https://sturgeon-boss-regularly.ngrok-free.app'
 
 opções_totvs=pd.read_excel(path,sheet_name=1).columns.tolist()
 
-st.header("Controle de pedidos do realtório TOTVS")
+st.header("Controle de pedidos do relatório TOTVS")
 
 
 nome=st.text_input("Me diga seu nome")
