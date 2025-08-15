@@ -16,7 +16,7 @@ st.header("Controle de pedidos do relatório TOTVS")
 
 
 nome=st.text_input("Me diga seu nome")
-if nome.strip() is '':
+if nome.strip() == '':
     st.stop()
 
 
@@ -86,7 +86,7 @@ with tabs[1]:
 
     resposta_fila['Data_Hora']=pd.to_datetime(resposta_fila['Data_Hora'])
     resposta_fila['Hora']=resposta_fila.Data_Hora.dt.strftime('%H:%m')
-    resposta_fila=resposta_fila[['Solicitou','Hora','relatorio','mes','ano']].rename(columns={'Solicitou':'Quem'})
+    resposta_fila=resposta_fila[['Solicitou','Hora','relatorio','mes','ano','status']].rename(columns={'Solicitou':'Quem'})
     resposta_fila.columns=resposta_fila.columns.str.title()
 
     st_autorefresh(interval=60000, key="autorefresh")

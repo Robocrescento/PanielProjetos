@@ -12,7 +12,7 @@ st_autorefresh(interval=30000, key="autorefresh")
 st.header("Controle de pedidos do relatório NaturalExtremo")
 
 nome=st.text_input("Me diga seu nome")
-if nome.strip() is '':
+if nome.strip() == '':
     st.stop()
 
 
