@@ -36,12 +36,12 @@ tabs=st.tabs(['Fazer pedido','Ver pedidos'])
 with tabs[0]:
     escolhidos = st.multiselect("Selecionar Relatórios", opções_totvs, opções_totvs)
     ano = st.selectbox('Ano', [2025, 2024], 0)
-    mes = st.selectbox('Mês', list(range(1, 13)), mes_at)
+    meses = st.multiselect('Mês', list(range(1, 13)), [mes_at])
 
 
     # escolhidos=opções_totvs[:10]
 
-    def coloca_na_fila(escolhidos):
+    def coloca_na_fila(escolhidos,mes,ano):
         projeto = 'totvs'
         args = [{"relatorio": e, "mes": mes, "ano": ano} for e in escolhidos]
         jargs = [json.dumps(e) for e in args]
@@ -60,8 +60,9 @@ with tabs[0]:
         return df
     if st.button('Fazer pedido'):
         with st.status("Carregando"):
-            df=coloca_na_fila(escolhidos)
-
+            for mes in meses:
+                df=coloca_na_fila(escolhidos,mes,ano)
+                sleep(3)
             st.session_state['df']=df
 
 
