@@ -7,7 +7,7 @@ url_base='https://sturgeon-boss-regularly.ngrok-free.app'
 nome='Rod'
 args='asdf'
 projeto='projeto'
-st_autorefresh(interval=30000, key="autorefresh")
+st_autorefresh(interval=45000, key="autorefresh")
 
 st.header("Controle de pedidos do relatório NaturalExtremo")
 

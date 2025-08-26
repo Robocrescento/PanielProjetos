@@ -11,7 +11,7 @@ path=fr'Caminhos.xlsx'
 url_base='https://sturgeon-boss-regularly.ngrok-free.app'
 
 opções_totvs=pd.read_excel(path,sheet_name=1).columns.tolist()
-st.header("Relatório Gerencial")
+st.header("Relatório Financeiro")
 
 st.header("Controle de pedidos do relatório TOTVS")
 
@@ -43,7 +43,8 @@ with tabs[0]:
     # escolhidos=opções_totvs[:10]
 
     def coloca_na_fila(escolhidos,mes,ano):
-        projeto = 'totvs'
+        projeto = 'totvs_fin'
+
         args = [{"relatorio": e, "mes": mes, "ano": ano} for e in escolhidos]
         jargs = [json.dumps(e) for e in args]
 
@@ -75,13 +76,12 @@ with tabs[1]:
         st.write("Nenhum projeto na fila")
         st.stop()
 
-    resposta_fila=resposta_fila.loc[resposta_fila.Projeto.str.lower()=='totvs']
+    resposta_fila=resposta_fila.loc[resposta_fila.Projeto.str.lower()=='totvs_fin']
 
 
 
     for g in ['relatorio','mes','ano']:
         resposta_fila.loc[:,g]=resposta_fila.ARGS.apply(lambda x:json.loads(x)[g])
-
     limite=max(pd.to_datetime(resposta_fila['Data_Hora']).dt.date.unique())
     data=st.date_input("Filtro de dia",value=limite)
 
