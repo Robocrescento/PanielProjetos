@@ -76,6 +76,9 @@ with tabs[1]:
         st.stop()
 
     resposta_fila=resposta_fila.loc[resposta_fila.Projeto.str.lower()=='totvs']
+    if len(resposta_fila)==0:
+        st.write("Nenhum projeto na fila")
+        st.stop()
 
 
 
