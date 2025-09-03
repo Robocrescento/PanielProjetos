@@ -71,7 +71,9 @@ if 'uid' in st.query_params.to_dict():
 
     if resp['Status']=='finished':
         st.success("Status : "+str(mapper_respostas.get(resp['Status'])))
-        st.success("OBS : "+str(resp['OBS']))
+        linhas=resp['OBS'].splitlines()
+        for e in linhas:
+            st.success(e)
     elif resp['Status']=='error':
         st.warning("Status : "+str(mapper_respostas.get(resp['Status'])))
         st.warning("OBS : "+str(resp['OBS']))
