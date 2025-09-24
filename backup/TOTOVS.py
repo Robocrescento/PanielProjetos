@@ -11,7 +11,7 @@ path=fr'Caminhos.xlsx'
 url_base='https://sturgeon-boss-regularly.ngrok-free.app'
 
 opções_totvs=pd.read_excel(path,sheet_name=1).columns.tolist()
-st.header("Relatório Financeiro")
+st.header("Relatório Gerencial")
 
 st.header("Controle de pedidos do relatório TOTVS")
 
@@ -31,7 +31,11 @@ if not 'df' in st.session_state.keys() :
 ano_at=datetime.today().year
 mes_at=datetime.today().month
 
-
+try:
+    resposta_fila = requests.get(url_base + '/fila').json()
+except:
+    st.warning("Erro no sistema. Contate o TI")
+    st.stop()
 
 tabs=st.tabs(['Fazer pedido','Ver pedidos'])
 with tabs[0]:
@@ -43,8 +47,7 @@ with tabs[0]:
     # escolhidos=opções_totvs[:10]
 
     def coloca_na_fila(escolhidos,mes,ano):
-        projeto = 'totvs_fin'
-
+        projeto = 'totvs'
         args = [{"relatorio": e, "mes": mes, "ano": ano} for e in escolhidos]
         jargs = [json.dumps(e) for e in args]
 
@@ -70,21 +73,21 @@ with tabs[0]:
 
 with tabs[1]:
 
-    resposta_fila = requests.get(url_base + '/fila').json()
     resposta_fila = pd.read_json(resposta_fila,orient='split')
     if len(resposta_fila)==0:
         st.write("Nenhum projeto na fila")
         st.stop()
 
-    resposta_fila=resposta_fila.loc[resposta_fila.Projeto.str.lower()=='totvs_fin']
-
+    resposta_fila=resposta_fila.loc[resposta_fila.Projeto.str.lower()=='totvs']
     if len(resposta_fila)==0:
         st.write("Nenhum projeto na fila")
         st.stop()
 
 
+
     for g in ['relatorio','mes','ano']:
         resposta_fila.loc[:,g]=resposta_fila.ARGS.apply(lambda x:json.loads(x)[g])
+
     limite=max(pd.to_datetime(resposta_fila['Data_Hora']).dt.date.unique())
     data=st.date_input("Filtro de dia",value=limite)
 
