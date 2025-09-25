@@ -106,3 +106,18 @@ with tabs[1]:
     st_autorefresh(interval=60000, key="autorefresh")
 
     st.dataframe(resposta_fila,hide_index=True)
+    resposta_fila_aux=resposta_fila[['Relatorio','Mes','Ano','Status']]
+    resposta_fila_aux.loc[:, 'É_ERRO'] = (resposta_fila_aux.loc[:, 'Status'] != 'error').astype(int)
+    resposta_fila_aux=resposta_fila_aux.groupby(['Relatorio','Mes','Ano'])['É_ERRO'].sum()
+    resposta_fila_aux=resposta_fila_aux[resposta_fila_aux==0].reset_index().drop(columns=['É_ERRO'])
+
+    with st.expander("Refazer relatórios que tem erro"):
+        st.dataframe(resposta_fila_aux, hide_index=True)
+        if st.button("Refazer"):
+            projeto = 'totvs_v2'
+            args = [{"relatorio": row['Relatorio'], "mes": row['Mes'], "ano": row['Ano']} for _,row in resposta_fila_aux.iterrows()]
+            jargs = [json.dumps(e) for e in args]
+
+            lista = {'lista': [{'nome': nome, 'projeto': projeto, 'argumentos': e} for e in jargs]}
+            resposta = requests.post(url_base + '/batch-start-projeto', json=lista).json()
+            st.write(resposta)
